@@ -261,6 +261,7 @@ API settings are stored in `prompt_optimizer.json` inside the plugin directory. 
 - The regular Segment Sample and Segment Refine nodes currently execute again on every queue, even when their seed and inputs are unchanged; the per-segment control workflow can use ComfyUI's native cache for unchanged preceding Steps.
 - Segment Decode requires FFmpeg. The project prefers `imageio-ffmpeg` and can also use FFmpeg from the system PATH.
 - Prompt optimization is optional and is not required for generation.
+- If an input field's actual area becomes unusually wide or narrow, install [ComfyUI-LegacyWidgetWidthFix](https://github.com/pekkAi-dev/ComfyUI-LegacyWidgetWidthFix) and keep a `Legacy Widget Width Fix` node in the workflow for it to take effect; installing the plugin alone does not activate the fix. This is a ComfyUI frontend issue, not a bug in this node. Most users will not need this.
 
 ## Additional information
 

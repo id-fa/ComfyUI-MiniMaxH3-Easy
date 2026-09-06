@@ -261,6 +261,7 @@ API 设置保存在插件目录的 `prompt_optimizer.json`。API Key 在该文�
 - 常规的 Segment Sample 和 Segment Refine 当前每次 Queue 都会重新执行，即使 Seed 和输入没有变化；逐段控制工作流中的 Segment Step 可以利用 ComfyUI 原生缓存复用未改变的前置分段。
 - Segment Decode 需要可用的 FFmpeg；项目会优先使用 `imageio-ffmpeg`，也支持系统 PATH 中的 FFmpeg。
 - 提示词优化是可选工具，不影响节点在未配置 API 时正常生成。
+- 如果节点内输入框的实际显示区域出现异常变宽或变窄，请安装 [ComfyUI-LegacyWidgetWidthFix](https://github.com/pekkAi-dev/ComfyUI-LegacyWidgetWidthFix)，并在工作流中放入并保留一个 `Legacy Widget Width Fix` 节点，这样修复才会生效；只安装插件不会启用修复。这是 ComfyUI 前端的问题，不是本节点的 bug。大多数用户无需处理。
 
 ## 其他说明
 
