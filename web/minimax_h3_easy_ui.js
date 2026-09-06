@@ -3802,7 +3802,11 @@ function insertDialogueBlockAtSelection(node, editor) {
 }
 
 function insertSegmentDividerAtSelection(node, editor) {
-    if (!isSegmentMode(node)) return false;
+    // The selected-video context can also be segmented by time/frame.  Keep
+    // the shortcut disabled for whole-video mode, where `---` is ordinary
+    // prompt text, but allow the same structured-editor shortcut as Context
+    // Segments when multiple candidate-video segments are active.
+    if (!isSegmentMode(node) && !isSelectedVideoContextSegmented(node)) return false;
     const selection = window.getSelection?.();
     if (!selection || !selection.rangeCount || !editor) return false;
     const range = selection.getRangeAt(0);

@@ -2954,8 +2954,16 @@ def _selected_video_segment_boundaries(
 
 
 def _selected_video_prompt_parts(prompt: str, segment_count: int) -> list[str]:
-    """Match a selected-video prompt to its cut count without forcing optimization."""
+    """Match a selected-video prompt to its cut count without forcing optimization.
+
+    Whole-video mode has one source segment, so its prompt is always treated as
+    one complete block.  In particular, standalone ``---`` lines are ordinary
+    prompt text there; divider validation only applies after the candidate video
+    has been explicitly split into multiple segments.
+    """
     count = max(1, int(segment_count))
+    if count == 1:
+        return [str(prompt or "").strip()]
     parts = split_prompt_segments(str(prompt or ""))
     if not parts:
         parts = [""]
@@ -4282,11 +4290,6 @@ class MiniMaxH3EasySelectedVideoContext(MiniMaxH3Easy):
         frames = _normalize_video_frames(frames)
         frames = _resample_video_frames(frames, float(source_fps or h3.FPS))
         source_frame_count = max(5, int(frames.shape[0]))
-        max_frames = _frame_length(MAX_SECONDS, h3.FPS)
-        if source_frame_count > max_frames:
-            raise ValueError(
-                f"Selected Video Context supports candidate videos up to {MAX_SECONDS:g} seconds"
-            )
         boundaries = _selected_video_segment_boundaries(
             source_frame_count,
             str(segment_mode or SELECTED_VIDEO_SEGMENT_WHOLE),
@@ -4307,7 +4310,7 @@ class MiniMaxH3EasySelectedVideoContext(MiniMaxH3Easy):
         optimization = _optimize_prompt_on_run(
             prompt,
             optimizer_mode,
-            min(MAX_SECONDS, max(MIN_SECONDS, source_frame_count / float(h3.FPS))),
+            max(MIN_SECONDS, source_frame_count / float(h3.FPS)),
             str(prompt_optimizer_scene_guide or "none"),
             items,
             kwargs.get("prompt_optimizer_resources"),
