@@ -4470,9 +4470,13 @@ class MiniMaxH3EasyContextSegments:
     def IS_CHANGED(cls, **kwargs):
         if bool(_read_prompt_optimizer_config().get("optimize_on_run")):
             return float("nan")
+        # In Context Segments, the comma-separated segment_seconds input is
+        # the authoritative duration plan; `seconds` is only its UI summary.
+        # A linked or stale summary value must not invalidate the node by
+        # itself when the actual segment plan is unchanged.
         return repr(tuple(kwargs.get(key) for key in (
             "mode", "audio_mode", "prompt", "resolution", "aspect_ratio",
-            "width", "height", "seconds", "segment_seconds", "context_length",
+            "width", "height", "segment_seconds", "context_length",
             "continuity_mode", "advanced", "fps", "keyframe_role", "ref_image_size",
             "reference_mention_mode", "prompt_optimizer_settings",
             "prompt_optimizer_scene_guide", "context_prompt_optimizer_mode",
