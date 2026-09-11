@@ -16,6 +16,8 @@ const SEGMENT_STEP_CLASS = "MiniMaxH3EasySegmentStep";
 const SEGMENT_COLLECT_CLASS = "MiniMaxH3EasySegmentCollect";
 const SEGMENT_DECODE_CLASS = "MiniMaxH3EasySegmentDecode";
 const OUTPUT_CLASS = "MiniMaxH3EasyOutput";
+const EASY_SAMPLER_CLASS = "MiniMaxH3EasySampler";
+const SELFLIFT_STRATEGY_CLASS = "MiniMaxH3EasySelfLiftStrategy";
 const LINKS_PROP = "minimax_h3_virtual_media_links";
 const PROMPT_DOC_PROP = "minimax_h3_prompt_reference_doc";
 const PROMPT_VIEW_PROP = "minimax_h3_prompt_view_mode";
@@ -26,6 +28,7 @@ const PROMPT_OPTIMIZER_SETTINGS_DEFAULTS = Object.freeze({
     api_url: "",
     api_key: "",
     model: "",
+    language: "en",
     read_media: false,
     optimize_on_run: false,
     unload_ollama_after_optimize: true,
@@ -40,15 +43,18 @@ const DIALOGUE_CLASS = "h3-dialogue-block";
 const PROMPT_VIEW_STRUCTURED = "structured";
 const PROMPT_VIEW_RAW = "raw";
 const PROMPT_GUIDES = [
-    { value: "none", zh: "\u4ec5\u901a\u7528\u65b9\u6848", en: "General only" },
-    { value: "3d_animation_short", zh: "3D \u52a8\u753b\u77ed\u7247", en: "3D Animation Short" },
-    { value: "brand_promo", zh: "\u54c1\u724c\u5ba3\u4f20\u7247", en: "Brand Promo Video" },
-    { value: "coop_game_intro", zh: "\u5408\u4f5c\u6e38\u620f\u5f00\u573a", en: "Co-op Game Intro" },
-    { value: "handdrawn_live", zh: "\u624b\u7ed8\u5b9e\u62cd\u878d\u5408", en: "Hand-drawn Live-action" },
-    { value: "minimalist_product_ad", zh: "\u6781\u7b80\u4ea7\u54c1\u5e7f\u544a", en: "Minimalist Product Ad" },
-    { value: "music_video_subtitle", zh: "\u97f3\u4e50\u89c6\u9891\u5b57\u5e55", en: "Music Video Subtitle" },
-    { value: "paper_collage", zh: "\u7eb8\u5f20\u62fc\u8d34\u89e3\u8bf4", en: "Paper Collage Explainer" },
-    { value: "papercraft_stop_motion", zh: "\u7eb8\u827a\u5b9a\u683c\u89e3\u8bf4", en: "Papercraft Stop-motion" },
+    { value: "none", zh: "\u901a\u7528", en: "General only", languages: ["en", "zh"] },
+    { value: "3d_animation_short", zh: "3D \u52a8\u753b\u77ed\u7247", en: "3D Animation Short", languages: ["en"] },
+    { value: "brand_promo", zh: "\u54c1\u724c\u5ba3\u4f20\u7247", en: "Brand Promo Video", languages: ["en"] },
+    { value: "coop_game_intro", zh: "\u5408\u4f5c\u6e38\u620f\u5f00\u573a", en: "Co-op Game Intro", languages: ["en"] },
+    { value: "handdrawn_live", zh: "\u624b\u7ed8\u5b9e\u62cd\u878d\u5408", en: "Hand-drawn Live-action", languages: ["en"] },
+    { value: "minimalist_product_ad", zh: "\u6781\u7b80\u4ea7\u54c1\u5e7f\u544a", en: "Minimalist Product Ad", languages: ["en"] },
+    { value: "music_video_subtitle", zh: "\u97f3\u4e50\u89c6\u9891\u5b57\u5e55", en: "Music Video Subtitle", languages: ["en"] },
+    { value: "paper_collage", zh: "\u7eb8\u5f20\u62fc\u8d34\u89e3\u8bf4", en: "Paper Collage Explainer", languages: ["en"] },
+    { value: "papercraft_stop_motion", zh: "\u7eb8\u827a\u5b9a\u683c\u89e3\u8bf4", en: "Papercraft Stop-motion", languages: ["en"] },
+    { value: "zh_dialogue", zh: "\u6587\u620f", en: "Dialogue and Performance", languages: ["zh"] },
+    { value: "zh_action", zh: "\u52a8\u4f5c", en: "Action", languages: ["zh"] },
+    { value: "zh_advertisement", zh: "\u5e7f\u544a", en: "Advertisement", languages: ["zh"] },
 ];
 const MODE_IMAGE = "image";
 const MODE_REFERENCE = "reference";
@@ -138,6 +144,7 @@ const TEXT = {
     apiUrl: ZH_BROWSER ? "API \u5730\u5740" : "API URL",
     apiKey: "API Key",
     apiModel: ZH_BROWSER ? "\u6a21\u578b\u540d" : "Model",
+    promptLanguage: ZH_BROWSER ? "\u63d0\u793a\u8bcd\u8bed\u8a00" : "Prompt language",
     promptGuide: ZH_BROWSER ? "\u63d0\u793a\u8bcd\u65b9\u6848" : "Prompt Guide",
     readMedia: ZH_BROWSER ? "\u8bfb\u53d6\u5df2\u8fde\u63a5\u5a92\u4f53" : "Read connected media",
     optimizeOnRun: ZH_BROWSER ? "\u8fd0\u884c\u5de5\u4f5c\u6d41\u65f6\u81ea\u52a8\u4f18\u5316" : "Optimize when workflow runs",
@@ -174,6 +181,20 @@ const TEXT = {
     mediaLoaderLimit: ZH_BROWSER ? "\u5df2\u8fbe\u8be5\u5206\u533a\u4e0a\u9650" : "This section is full",
     mediaLoaderUnsupported: ZH_BROWSER ? "\u53ea\u652f\u6301\u56fe\u7247\u3001\u97f3\u9891\u6216\u89c6\u9891\u6587\u4ef6" : "Only image, audio, and video files are supported",
     outputTitle: ZH_BROWSER ? "MiniMax H3 Easy \u8f93\u51fa" : "MiniMax H3 Easy Output",
+    samplerTitle: ZH_BROWSER ? "MiniMax H3 Easy \u91c7\u6837" : "MiniMax H3 Easy Sample",
+    selfLiftTitle: "MiniMax H3 Easy SelfLift",
+    samplingPlan: ZH_BROWSER ? "\u91c7\u6837\u65b9\u6848" : "Sampling plan",
+    sampledLatent: ZH_BROWSER ? "\u91c7\u6837 Latent" : "Sampled latent",
+    transitionStep: ZH_BROWSER ? "\u4f4e\u5206\u8fa8\u7387\u6b65\u6570" : "Low-resolution steps",
+    lowresScale: ZH_BROWSER ? "\u4f4e\u5206\u8fa8\u7387\u6bd4\u4f8b" : "Low-resolution scale",
+    upscalerModel: ZH_BROWSER ? "Latent \u653e\u5927\u6a21\u578b" : "Latent upscaler model",
+    cfg: "CFG",
+    rho: "Rho",
+    wMin: "W Min",
+    wMax: "W Max",
+    upscalerDevice: ZH_BROWSER ? "\u653e\u5927\u8bbe\u5907" : "Upscaler device",
+    upscalerPrecision: ZH_BROWSER ? "\u653e\u5927\u7cbe\u5ea6" : "Upscaler precision",
+    upscalerChunking: ZH_BROWSER ? "\u65f6\u95f4\u5206\u5757\u653e\u5927" : "Temporal chunked upscale",
     category: "MiniMax H3 Easy",
     mode: ZH_BROWSER ? "\u6a21\u5f0f" : "Mode",
     audioMode: ZH_BROWSER ? "\u97f3\u9891\u6a21\u5f0f" : "Audio mode",
@@ -280,7 +301,7 @@ const OPTION_DEFS = {
         latent_upscale: "Latent Upscale",
     },
     continuity_mode: {
-        [CONTINUITY_LATENT]: "Latent Guide",
+        [CONTINUITY_LATENT]: "Motion Context",
         [CONTINUITY_GUIDE]: "RGB Guide",
         [CONTINUITY_SOFT_AV]: "Soft AV Prefix",
         [CONTINUITY_HARD_AV]: "Hard AV Prefix",
@@ -292,7 +313,11 @@ const OPTION_DEFS = {
         ollama: "Ollama",
     },
     prompt_optimizer_scene_guide: {
-        none: ZH_BROWSER ? "\u4ec5\u901a\u7528\u65b9\u6848" : "General only",
+        none: ZH_BROWSER ? "\u901a\u7528" : "General only",
+    },
+    prompt_optimizer_language: {
+        en: ZH_BROWSER ? "English" : "English",
+        zh: ZH_BROWSER ? "\u4e2d\u6587" : "Chinese",
     },
     context_prompt_optimizer_mode: {
         whole_sequence: ZH_BROWSER ? "\u6574\u4f53\u4f18\u5316" : "Whole sequence",
@@ -400,6 +425,17 @@ const OPTION_ALIASES = {
         per_segment: "per_segment",
         "\u9010\u6bb5\u4f18\u5316": "per_segment",
         "Per segment": "per_segment",
+    },
+    continuity_mode: {
+        [CONTINUITY_LATENT]: CONTINUITY_LATENT,
+        "Motion Context": CONTINUITY_LATENT,
+        "Latent Guide": CONTINUITY_LATENT,
+        [CONTINUITY_GUIDE]: CONTINUITY_GUIDE,
+        "RGB Guide": CONTINUITY_GUIDE,
+        [CONTINUITY_SOFT_AV]: CONTINUITY_SOFT_AV,
+        "Soft AV Prefix": CONTINUITY_SOFT_AV,
+        [CONTINUITY_HARD_AV]: CONTINUITY_HARD_AV,
+        "Hard AV Prefix": CONTINUITY_HARD_AV,
     },
     empty_output_mode: {
         block_missing: "block_missing",
@@ -729,6 +765,29 @@ function canonicalPromptGuide(value) {
     return found?.value || "none";
 }
 
+function promptGuideLanguage(value) {
+    return String(value || "en").toLowerCase() === "zh" ? "zh" : "en";
+}
+
+function promptGuidesForLanguage(language) {
+    const normalized = promptGuideLanguage(language);
+    return PROMPT_GUIDES.filter((item) => !Array.isArray(item.languages) || item.languages.includes(normalized));
+}
+
+function promptGuideOptionsForLanguage(language) {
+    return Object.fromEntries(
+        promptGuidesForLanguage(language).map((item) => [item.value, ZH_BROWSER ? item.zh : item.en]),
+    );
+}
+
+function canonicalPromptGuideForLanguage(value, language) {
+    const raw = String(value ?? "");
+    const found = promptGuidesForLanguage(language).find(
+        (item) => raw === item.value || raw === item.zh || raw === item.en,
+    );
+    return found?.value || "none";
+}
+
 function localizeComboWidget(widget, node = null) {
     const name = String(widget?.name || "");
     if (name === "prompt_optimizer_scene_guide") {
@@ -804,8 +863,10 @@ function localizeNodeInstance(node) {
     }
     if (isMediaLoader(node)) {
         node.title = TEXT.mediaLoaderTitle;
+        const outputLabels = { media_bundle: TEXT.mediaBundle };
         for (const output of node.outputs || []) {
-            if (String(output.name || "").toLowerCase() === "media_bundle") setLocalizedSlotLabel(output, TEXT.mediaBundle);
+            const key = String(output.name || "").toLowerCase();
+            if (outputLabels[key]) setLocalizedSlotLabel(output, outputLabels[key]);
         }
         return;
     }
@@ -856,13 +917,55 @@ function localizeNodeInstance(node) {
         }
         return;
     }
+    if (nodeMatchesClass(node, EASY_SAMPLER_CLASS, TEXT.samplerTitle, "__h3EasySamplerInstalled")) {
+        node.title = TEXT.samplerTitle;
+        for (const widget of node.widgets || []) {
+            if (widget.name === "seed") widget.label = TEXT.seedLabel;
+        }
+        const inputLabels = {
+            h3_context: TEXT.outputContext,
+            model: TEXT.outputModel,
+            sampling_plan: TEXT.samplingPlan,
+        };
+        for (const input of node.inputs || []) {
+            if (inputLabels[input.name]) setLocalizedSlotLabel(input, inputLabels[input.name]);
+        }
+        for (const output of node.outputs || []) {
+            if (output.name === "sampled_latent") setLocalizedSlotLabel(output, TEXT.sampledLatent);
+        }
+        return;
+    }
+    if (nodeMatchesClass(node, SELFLIFT_STRATEGY_CLASS, TEXT.selfLiftTitle, "__h3SelfLiftStrategyInstalled")) {
+        node.title = TEXT.selfLiftTitle;
+        const labels = {
+            transition_step: TEXT.transitionStep,
+            lowres_scale: TEXT.lowresScale,
+            upscaler_model: TEXT.upscalerModel,
+            advanced: TEXT.advanced,
+            cfg: TEXT.cfg,
+            rho: TEXT.rho,
+            w_min: TEXT.wMin,
+            w_max: TEXT.wMax,
+            upscaler_device: TEXT.upscalerDevice,
+            upscaler_precision: TEXT.upscalerPrecision,
+            upscaler_chunking: TEXT.upscalerChunking,
+        };
+        for (const widget of node.widgets || []) {
+            if (labels[widget.name]) widget.label = labels[widget.name];
+            if (widget.name === "upscaler_model") localizeOptionalModelWidget(widget);
+        }
+        for (const output of node.outputs || []) {
+            if (output.name === "sampling_plan") setLocalizedSlotLabel(output, TEXT.samplingPlan);
+        }
+        return;
+    }
     if (nodeMatchesClass(node, SEGMENT_RENDER_CLASS, TEXT.segmentRenderTitle, "__h3SegmentRenderInstalled")) {
         node.title = TEXT.segmentRenderTitle;
         const widgetLabels = { seed: TEXT.seedLabel, segment_seeds: TEXT.segmentSeeds };
         for (const widget of node.widgets || []) {
             if (widgetLabels[widget.name]) widget.label = widgetLabels[widget.name];
         }
-        const inputLabels = { h3_context: TEXT.outputContext, model: TEXT.outputModel };
+        const inputLabels = { h3_context: TEXT.outputContext, model: TEXT.outputModel, sampling_plan: TEXT.samplingPlan };
         for (const input of node.inputs || []) {
             if (inputLabels[input.name]) setLocalizedSlotLabel(input, inputLabels[input.name]);
         }
@@ -899,6 +1002,7 @@ function localizeNodeInstance(node) {
         const inputLabels = {
             h3_context: TEXT.outputContext,
             model: TEXT.outputModel,
+            sampling_plan: TEXT.samplingPlan,
         };
         for (const input of node.inputs || []) {
             if (inputLabels[input.name]) setLocalizedSlotLabel(input, inputLabels[input.name]);
@@ -980,7 +1084,7 @@ function localizeNodeInstance(node) {
 }
 
 function localizeNodeDefinition(nodeData) {
-    if (!nodeData || ![NODE_CLASS, CONTEXT_SEGMENTS_CLASS, SELECTED_VIDEO_CONTEXT_CLASS, LOADER_CLASS, ADAPTER_CLASS, MEDIA_LOADER_CLASS, MEDIA_BRIDGE_CLASS, MEDIA_SPLITTER_CLASS, OUTPUT_CLASS, SEGMENT_RENDER_CLASS, SEGMENT_SAMPLE_SETUP_CLASS, SEGMENT_STEP_CLASS, SEGMENT_COLLECT_CLASS, SEGMENT_REFINE_CLASS, SEGMENT_DECODE_CLASS].includes(nodeData.name)) return;
+    if (!nodeData || ![NODE_CLASS, CONTEXT_SEGMENTS_CLASS, SELECTED_VIDEO_CONTEXT_CLASS, LOADER_CLASS, ADAPTER_CLASS, MEDIA_LOADER_CLASS, MEDIA_BRIDGE_CLASS, MEDIA_SPLITTER_CLASS, OUTPUT_CLASS, EASY_SAMPLER_CLASS, SELFLIFT_STRATEGY_CLASS, SEGMENT_RENDER_CLASS, SEGMENT_SAMPLE_SETUP_CLASS, SEGMENT_STEP_CLASS, SEGMENT_COLLECT_CLASS, SEGMENT_REFINE_CLASS, SEGMENT_DECODE_CLASS].includes(nodeData.name)) return;
     nodeData.display_name = nodeData.name === LOADER_CLASS
         ? TEXT.loaderTitle
         : nodeData.name === ADAPTER_CLASS
@@ -993,6 +1097,10 @@ function localizeNodeDefinition(nodeData) {
             ? TEXT.mediaSplitterTitle
             : nodeData.name === OUTPUT_CLASS
             ? TEXT.outputTitle
+            : nodeData.name === EASY_SAMPLER_CLASS
+            ? TEXT.samplerTitle
+            : nodeData.name === SELFLIFT_STRATEGY_CLASS
+            ? TEXT.selfLiftTitle
               : nodeData.name === SEGMENT_RENDER_CLASS
               ? TEXT.segmentRenderTitle
               : nodeData.name === SEGMENT_SAMPLE_SETUP_CLASS
@@ -2654,7 +2762,7 @@ function patchGraphToPrompt() {
             }
             promptNode.inputs.advanced = asBoolean(getWidgetValue(node, "advanced", false));
             promptNode.inputs.prompt_optimizer_settings = false;
-            promptNode.inputs.prompt_optimizer_scene_guide = canonicalPromptGuide(getWidgetValue(node, "prompt_optimizer_scene_guide", "none"));
+            promptNode.inputs.prompt_optimizer_scene_guide = promptOptimizerGuideForNode(node);
             promptNode.inputs.prompt_optimizer_resources = JSON.stringify(promptOptimizerResources(node));
             promptNode.inputs.prompt_optimizer_marker = JSON.stringify(node.properties?.[PROMPT_AUTO_MARKER_PROP] || {});
             promptNode.inputs.prompt_optimizer_prompt_connected = hasPromptConnection;
@@ -4597,7 +4705,9 @@ function syncModeWidgets(node, { adjustHeight = true } = {}) {
         setConditionalWidgetVisible(node, getWidget(node, "width"), isCustomResolution(node), { adjustHeight }),
         setConditionalWidgetVisible(node, getWidget(node, "height"), isCustomResolution(node), { adjustHeight }),
         setConditionalWidgetVisible(node, getWidget(node, "prompt_optimizer_settings"), advanced, { adjustHeight }),
-        setConditionalWidgetVisible(node, getWidget(node, "prompt_optimizer_scene_guide"), advanced, { adjustHeight }),
+        // Prompt guide is now a global optimizer setting. Keep the node field
+        // hidden as a compatibility slot for older workflow data.
+        setConditionalWidgetVisible(node, getWidget(node, "prompt_optimizer_scene_guide"), false, { adjustHeight }),
         setConditionalWidgetVisible(node, getWidget(node, "context_prompt_optimizer_mode"), segmentContextNode && advanced, { adjustHeight }),
         setConditionalWidgetVisible(node, getWidget(node, "context_prompt_optimizer_concurrency"), segmentContextNode && advanced && contextOptimizerMode === "per_segment", { adjustHeight }),
         setConditionalWidgetVisible(node, getWidget(node, "segment_seconds"), isSegmentMode(node), { adjustHeight }),
@@ -4646,6 +4756,26 @@ function syncSegmentRefineWidgets(node, { adjustHeight = true } = {}) {
         setConditionalWidgetVisible(node, getWidget(node, "tile_height"), tiled, { adjustHeight }),
         setConditionalWidgetVisible(node, getWidget(node, "tile_overlap"), tiled, { adjustHeight }),
         setConditionalWidgetVisible(node, getWidget(node, "tile_fade"), tiled, { adjustHeight }),
+    ].some(Boolean);
+    if (changed) {
+        refreshVueNodeWidgets(node);
+        node._widgetSlotsDirty = true;
+        node.setDirtyCanvas?.(true, true);
+        app.graph?.setDirtyCanvas?.(true, true);
+    }
+    return changed;
+}
+
+function syncSelfLiftWidgets(node, { adjustHeight = true } = {}) {
+    const advanced = asBoolean(getWidgetValue(node, "advanced", false));
+    const changed = [
+        setConditionalWidgetVisible(node, getWidget(node, "cfg"), advanced, { adjustHeight }),
+        setConditionalWidgetVisible(node, getWidget(node, "rho"), advanced, { adjustHeight }),
+        setConditionalWidgetVisible(node, getWidget(node, "w_min"), advanced, { adjustHeight }),
+        setConditionalWidgetVisible(node, getWidget(node, "w_max"), advanced, { adjustHeight }),
+        setConditionalWidgetVisible(node, getWidget(node, "upscaler_device"), advanced, { adjustHeight }),
+        setConditionalWidgetVisible(node, getWidget(node, "upscaler_precision"), advanced, { adjustHeight }),
+        setConditionalWidgetVisible(node, getWidget(node, "upscaler_chunking"), advanced, { adjustHeight }),
     ].some(Boolean);
     if (changed) {
         refreshVueNodeWidgets(node);
@@ -4705,11 +4835,23 @@ function normalizePromptOptimizerSettings(value) {
     const source = value && typeof value === "object" ? value : {};
     const requestedFormat = String(source.api_format || "openai").toLowerCase();
     const apiFormat = ["openai", "responses", "gemini", "ollama"].includes(requestedFormat) ? requestedFormat : "openai";
+    const requestedLanguage = String(source.language || "en").toLowerCase();
+    const language = ["en", "zh"].includes(requestedLanguage) ? requestedLanguage : "en";
+    const rawGuideMap = source.prompt_guide_by_language && typeof source.prompt_guide_by_language === "object"
+        ? source.prompt_guide_by_language
+        : {};
+    const promptGuideByLanguage = {};
+    for (const key of ["en", "zh"]) {
+        const rawGuide = String(rawGuideMap[key] || "").trim();
+        if (rawGuide) promptGuideByLanguage[key] = canonicalPromptGuideForLanguage(rawGuide, key);
+    }
     return {
         api_format: apiFormat,
         api_url: String(source.api_url || "").trim(),
         api_key: String(source.api_key || ""),
         model: String(source.model || "").trim(),
+        language,
+        prompt_guide_by_language: promptGuideByLanguage,
         read_media: asBoolean(source.read_media, false),
         optimize_on_run: asBoolean(source.optimize_on_run, false),
         unload_ollama_after_optimize: asBoolean(source.unload_ollama_after_optimize, true),
@@ -4775,7 +4917,17 @@ function makePromptOptimizerSettingsRow(labelText, control) {
     return row;
 }
 
-function makePromptOptimizerSelect(initialValue) {
+function makePromptOptimizerSettingsPair(leftLabel, leftControl, rightLabel, rightControl) {
+    const pair = document.createElement("div");
+    pair.className = "h3-optimizer-settings-pair";
+    pair.append(
+        makePromptOptimizerSettingsRow(leftLabel, leftControl),
+        makePromptOptimizerSettingsRow(rightLabel, rightControl),
+    );
+    return pair;
+}
+
+function makePromptOptimizerSelect(initialValue, definitionName = "prompt_optimizer_api_format", initialDefinition = null) {
     const root = document.createElement("div");
     root.className = "h3-optimizer-settings-select-wrap";
     const trigger = document.createElement("button");
@@ -4791,7 +4943,7 @@ function makePromptOptimizerSelect(initialValue) {
     menu.className = "h3-optimizer-settings-select-menu";
     menu.setAttribute("role", "listbox");
     menu.hidden = true;
-    const options = Object.entries(OPTION_DEFS.prompt_optimizer_api_format).map(([value, label]) => ({ value, label }));
+    let options = Object.entries(initialDefinition || OPTION_DEFS[definitionName] || {}).map(([value, label]) => ({ value, label }));
     trigger.value = options.some((item) => item.value === initialValue) ? initialValue : options[0]?.value || "openai";
     let activeIndex = Math.max(0, options.findIndex((item) => item.value === trigger.value));
 
@@ -4819,17 +4971,20 @@ function makePromptOptimizerSelect(initialValue) {
         root.dispatchEvent(new Event("change"));
         trigger.focus();
     };
-    options.forEach((item, index) => {
-        const option = document.createElement("button");
-        option.type = "button";
-        option.className = "h3-optimizer-settings-select-option";
-        option.dataset.value = item.value;
-        option.setAttribute("role", "option");
-        option.textContent = item.label;
-        option.addEventListener("click", () => choose(item.value));
-        option.addEventListener("pointerenter", () => { activeIndex = index; });
-        menu.append(option);
-    });
+    const rebuildOptions = () => {
+        menu.replaceChildren();
+        options.forEach((item, index) => {
+            const option = document.createElement("button");
+            option.type = "button";
+            option.className = "h3-optimizer-settings-select-option";
+            option.dataset.value = item.value;
+            option.setAttribute("role", "option");
+            option.textContent = item.label;
+            option.addEventListener("click", () => choose(item.value));
+            option.addEventListener("pointerenter", () => { activeIndex = index; });
+            menu.append(option);
+        });
+    };
     trigger.append(valueLabel, chevron);
     root.append(trigger, menu);
     trigger.addEventListener("click", () => {
@@ -4871,8 +5026,16 @@ function makePromptOptimizerSelect(initialValue) {
             }
         },
     });
+    root.setOptions = (definition) => {
+        options = Object.entries(definition || {}).map(([value, label]) => ({ value, label }));
+        if (!options.some((item) => item.value === trigger.value)) trigger.value = options[0]?.value || "";
+        activeIndex = Math.max(0, options.findIndex((item) => item.value === trigger.value));
+        rebuildOptions();
+        render();
+    };
     root.focus = () => trigger.focus();
     root.__h3CloseMenu = close;
+    rebuildOptions();
     render();
     return root;
 }
@@ -4938,6 +5101,30 @@ async function openPromptOptimizerSettings(node) {
     form.id = "h3-optimizer-settings-form";
     form.className = "h3-optimizer-settings-form";
     const apiFormat = makePromptOptimizerSelect(promptOptimizerSettingsCache.api_format);
+    const promptLanguage = makePromptOptimizerSelect(
+        promptOptimizerSettingsCache.language,
+        "prompt_optimizer_language",
+    );
+    const selectedGuides = { ...(promptOptimizerSettingsCache.prompt_guide_by_language || {}) };
+    const initialPromptLanguage = promptGuideLanguage(promptLanguage.value);
+    const initialPromptGuide = canonicalPromptGuideForLanguage(
+        selectedGuides[initialPromptLanguage]
+            || getWidgetValue(node, "prompt_optimizer_scene_guide", "none"),
+        initialPromptLanguage,
+    );
+    const promptGuide = makePromptOptimizerSelect(
+        initialPromptGuide,
+        "prompt_optimizer_language",
+        promptGuideOptionsForLanguage(initialPromptLanguage),
+    );
+    let activePromptLanguage = initialPromptLanguage;
+    const syncPromptGuideOptions = () => {
+        selectedGuides[activePromptLanguage] = canonicalPromptGuideForLanguage(promptGuide.value, activePromptLanguage);
+        activePromptLanguage = promptGuideLanguage(promptLanguage.value);
+        promptGuide.setOptions(promptGuideOptionsForLanguage(activePromptLanguage));
+        promptGuide.value = canonicalPromptGuideForLanguage(selectedGuides[activePromptLanguage] || "none", activePromptLanguage);
+    };
+    promptLanguage.addEventListener("change", syncPromptGuideOptions);
     const apiUrl = document.createElement("input");
     apiUrl.className = "h3-optimizer-settings-control";
     apiUrl.type = "text";
@@ -4982,6 +5169,7 @@ async function openPromptOptimizerSettings(node) {
     apiFormat.addEventListener("change", syncOllamaUnloadVisibility);
     syncOllamaUnloadVisibility();
     form.append(
+        makePromptOptimizerSettingsPair(TEXT.promptLanguage, promptLanguage, TEXT.promptGuide, promptGuide),
         makePromptOptimizerSettingsRow(TEXT.apiFormat, apiFormat),
         makePromptOptimizerSettingsRow(TEXT.apiUrl, apiUrl),
         makePromptOptimizerSettingsRow(TEXT.apiKey, apiKey),
@@ -5029,11 +5217,15 @@ async function openPromptOptimizerSettings(node) {
         saveButton.disabled = true;
         error.hidden = true;
         try {
+            const selectedLanguage = promptGuideLanguage(promptLanguage.value);
+            selectedGuides[selectedLanguage] = canonicalPromptGuideForLanguage(promptGuide.value, selectedLanguage);
             await savePromptOptimizerSettings({
                 api_format: apiFormat.value,
                 api_url: apiUrl.value,
                 api_key: apiKey.value,
                 model: model.value,
+                language: promptLanguage.value,
+                prompt_guide_by_language: selectedGuides,
                 read_media: readMedia.checked,
                 optimize_on_run: optimizeOnRun.checked,
                 unload_ollama_after_optimize: ollamaUnload.checked,
@@ -5052,7 +5244,7 @@ async function openPromptOptimizerSettings(node) {
 function promptOptimizerState(node) {
     return {
         ...promptOptimizerSettingsCache,
-        scene_guide: canonicalPromptGuide(getWidgetValue(node, "prompt_optimizer_scene_guide", "none")),
+        scene_guide: promptOptimizerGuideForNode(node),
     };
 }
 
@@ -5399,6 +5591,7 @@ async function optimizePromptFromEditor(node) {
         const commonPayload = {
             prompt: sourcePrompt,
             scene_guide: state.scene_guide,
+            prompt_optimizer_language: state.language,
             mode: requestMode,
             audio_mode: segmentMode
                 ? canonicalOption("audio_mode", getWidgetValue(node, "audio_mode", CONTEXT_AUDIO_GENERATED))
@@ -7349,6 +7542,84 @@ function formatMediaDuration(seconds) {
     return `${minutes}:${String(remainder).padStart(2, "0")}`;
 }
 
+function installEasySamplerNode(nodeType, nodeData) {
+    if (nodeData?.name !== EASY_SAMPLER_CLASS) return;
+    if (nodeType.prototype.__h3EasySamplerInstalled) return;
+    nodeType.prototype.__h3EasySamplerInstalled = true;
+
+    const setup = (node) => {
+        if (!node) return;
+        localizeNodeInstance(node);
+    };
+    const originalCreated = nodeType.prototype.onNodeCreated;
+    nodeType.prototype.onNodeCreated = function onNodeCreatedH3EasySampler() {
+        const result = originalCreated?.apply(this, arguments);
+        setup(this);
+        return result;
+    };
+    const originalAdded = nodeType.prototype.onAdded;
+    nodeType.prototype.onAdded = function onAddedH3EasySampler(graph) {
+        const result = originalAdded?.apply(this, arguments);
+        setup(this);
+        return result;
+    };
+    const originalConfigure = nodeType.prototype.onConfigure;
+    nodeType.prototype.onConfigure = function onConfigureH3EasySampler(info) {
+        const result = originalConfigure?.apply(this, arguments);
+        setup(this);
+        return result;
+    };
+}
+
+function installSelfLiftStrategyNode(nodeType, nodeData) {
+    if (nodeData?.name !== SELFLIFT_STRATEGY_CLASS) return;
+    if (nodeType.prototype.__h3SelfLiftStrategyInstalled) return;
+    nodeType.prototype.__h3SelfLiftStrategyInstalled = true;
+
+    const setup = (node, adjustHeight = true) => {
+        if (!node) return;
+        localizeNodeInstance(node);
+        const advanced = getWidget(node, "advanced");
+        if (advanced && !advanced.__h3SelfLiftAdvancedBound) {
+            advanced.__h3SelfLiftAdvancedBound = true;
+            const originalCallback = advanced.callback;
+            advanced.callback = function onSelfLiftAdvancedChanged(value) {
+                originalCallback?.apply(this, arguments);
+                syncSelfLiftWidgets(node);
+                repairNodeLayout(node);
+                node.setDirtyCanvas?.(true, true);
+            };
+        }
+        syncSelfLiftWidgets(node, { adjustHeight });
+    };
+
+    const originalCreated = nodeType.prototype.onNodeCreated;
+    nodeType.prototype.onNodeCreated = function onNodeCreatedH3SelfLiftStrategy() {
+        const result = originalCreated?.apply(this, arguments);
+        setup(this);
+        return result;
+    };
+    const originalAdded = nodeType.prototype.onAdded;
+    nodeType.prototype.onAdded = function onAddedH3SelfLiftStrategy(graph) {
+        const result = originalAdded?.apply(this, arguments);
+        setup(this, false);
+        return result;
+    };
+    const originalConfigure = nodeType.prototype.onConfigure;
+    nodeType.prototype.onConfigure = function onConfigureH3SelfLiftStrategy(info) {
+        const result = originalConfigure?.apply(this, arguments);
+        setup(this, false);
+        return result;
+    };
+}
+
+function promptOptimizerGuideForNode(node) {
+    const language = promptGuideLanguage(promptOptimizerSettingsCache.language);
+    const configured = promptOptimizerSettingsCache.prompt_guide_by_language?.[language];
+    if (configured) return canonicalPromptGuideForLanguage(configured, language);
+    return canonicalPromptGuide(getWidgetValue(node, "prompt_optimizer_scene_guide", "none"));
+}
+
 function formatAudioDurationLabel(seconds) {
     const value = Number(seconds);
     if (!Number.isFinite(value) || value < 0) return "";
@@ -7996,7 +8267,6 @@ function installMediaLoaderNode(nodeType, nodeData) {
     const setup = (node) => {
         if (!node || node.__h3MediaLoaderSetup || typeof node.addDOMWidget !== "function") return;
         node.__h3MediaLoaderSetup = true;
-        localizeNodeInstance(node);
         const stateWidget = getWidget(node, "media_state");
         mediaLoaderHideStateWidget(stateWidget);
         const panel = document.createElement("div");
@@ -8073,11 +8343,28 @@ function installMediaLoaderNode(nodeType, nodeData) {
         repairNodeLayout(node);
     };
     const originalCreated = nodeType.prototype.onNodeCreated;
-    nodeType.prototype.onNodeCreated = function onNodeCreatedH3MediaLoader() { const result = originalCreated?.apply(this, arguments); setup(this); return result; };
+    nodeType.prototype.onNodeCreated = function onNodeCreatedH3MediaLoader() {
+        const result = originalCreated?.apply(this, arguments);
+        localizeNodeInstance(this);
+        setup(this);
+        return result;
+    };
     const originalAdded = nodeType.prototype.onAdded;
-    nodeType.prototype.onAdded = function onAddedH3MediaLoader(graph) { const result = originalAdded?.apply(this, arguments); setup(this); mediaLoaderRender(this); return result; };
+    nodeType.prototype.onAdded = function onAddedH3MediaLoader(graph) {
+        const result = originalAdded?.apply(this, arguments);
+        localizeNodeInstance(this);
+        setup(this);
+        mediaLoaderRender(this);
+        return result;
+    };
     const originalConfigure = nodeType.prototype.onConfigure;
-    nodeType.prototype.onConfigure = function onConfigureH3MediaLoader(info) { const result = originalConfigure?.apply(this, arguments); setup(this); mediaLoaderRender(this); return result; };
+    nodeType.prototype.onConfigure = function onConfigureH3MediaLoader(info) {
+        const result = originalConfigure?.apply(this, arguments);
+        localizeNodeInstance(this);
+        setup(this);
+        mediaLoaderRender(this);
+        return result;
+    };
     const originalResize = nodeType.prototype.onResize;
     nodeType.prototype.onResize = function onResizeH3MediaLoader(size) {
         const result = originalResize?.apply(this, arguments);
@@ -8319,14 +8606,16 @@ function install() {
         --h3-settings-accent: #a8c7fa; --h3-settings-accent-dark: #041e49;
         position: fixed; inset: 0; z-index: 10090; display: flex; align-items: center; justify-content: center; padding: 16px;
         box-sizing: border-box; background: rgba(0,0,0,.58); color: var(--h3-settings-text);
-        font-family: "Google Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+        /* Prefer one Windows UI font for both Latin and Chinese glyphs so the
+           modal does not mix Segoe UI with a visually heavier fallback font. */
+        font-family: "Microsoft YaHei UI", "Microsoft YaHei", "Segoe UI", system-ui, -apple-system, sans-serif;
       }
       .h3-optimizer-settings-dialog {
         width: min(440px, calc(100vw - 32px)); max-height: calc(100vh - 32px); box-sizing: border-box; overflow: auto; border: 1px solid rgba(255,255,255,.15); border-radius: 16px;
         background: var(--h3-settings-bg-base); color: var(--h3-settings-text); box-shadow: 0 24px 64px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.05);
       }
       .h3-optimizer-settings-header { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 20px 12px; border-bottom: 1px solid var(--h3-settings-border); }
-      .h3-optimizer-settings-title { min-width: 0; color: var(--h3-settings-text); font-size: 17px; font-weight: 600; letter-spacing: 0; }
+      .h3-optimizer-settings-title { min-width: 0; color: var(--h3-settings-text); font-size: 17px; font-weight: 500; line-height: 1.35; letter-spacing: 0; }
       .h3-optimizer-settings-header-actions { display: flex; align-items: center; gap: 2px; flex: 0 0 auto; }
       .h3-optimizer-settings-close {
         appearance: none; width: 28px; height: 28px; flex: 0 0 28px; padding: 0; border: 1px solid transparent; border-radius: 8px; background: transparent;
@@ -8334,12 +8623,13 @@ function install() {
       }
       .h3-optimizer-settings-close:hover, .h3-optimizer-settings-close:focus-visible { border-color: rgba(168,199,250,.32); background: rgba(168,199,250,.1); color: #dce7fa; outline: none; }
       .h3-optimizer-settings-form { display: grid; gap: 10px; padding: 14px 20px 12px; }
+      .h3-optimizer-settings-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; min-width: 0; }
       .h3-optimizer-settings-row { display: flex; flex-direction: column; align-items: stretch; gap: 5px; min-height: 0; }
-      .h3-optimizer-settings-label { color: var(--h3-settings-muted); font-size: 13px; font-weight: 500; }
+      .h3-optimizer-settings-label { color: #b1b5be; font-size: 13px; font-weight: 400; line-height: 1.4; }
       .h3-optimizer-settings-check[hidden] { display: none !important; }
       .h3-optimizer-settings-control {
         width: 100%; min-width: 0; box-sizing: border-box; height: 34px; padding: 7px 12px; border: 1px solid var(--h3-settings-border); border-radius: 8px;
-        background: var(--h3-settings-bg-base); color: var(--h3-settings-text); outline: none; font: inherit; font-size: 14px; transition: border-color .2s, background .2s, box-shadow .2s;
+        background: var(--h3-settings-bg-base); color: var(--h3-settings-text); outline: none; font: inherit; font-size: 14px; font-weight: 400; line-height: 1.35; transition: border-color .2s, background .2s, box-shadow .2s;
       }
       .h3-optimizer-settings-control:hover { border-color: var(--h3-settings-border-light); }
       .h3-optimizer-settings-control:focus, .h3-optimizer-settings-control.is-open { border-color: var(--h3-settings-accent); background: #1a1b1e; box-shadow: none; }
@@ -8354,8 +8644,8 @@ function install() {
         background: rgba(38,40,46,.96); backdrop-filter: blur(12px); box-shadow: 0 12px 32px rgba(0,0,0,.6); opacity: 1; transform: translateY(0);
       }
       .h3-optimizer-settings-select-option {
-        display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 38px; padding: 10px 12px; border: 0; border-radius: 8px; background: transparent;
-        color: var(--h3-settings-text); cursor: pointer; font: inherit; font-size: 14px; text-align: left; transition: background .12s, color .12s;
+        display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 32px; padding: 6px 10px; border: 0; border-radius: 7px; background: transparent;
+        color: var(--h3-settings-text); cursor: pointer; font: inherit; font-size: 14px; line-height: 1.25; text-align: left; transition: background .12s, color .12s;
       }
       .h3-optimizer-settings-select-option:hover { background: rgba(255,255,255,.06); }
       .h3-optimizer-settings-select-option.is-selected { background: rgba(168,199,250,.1); color: var(--h3-settings-accent); font-weight: 500; }
@@ -8380,6 +8670,9 @@ function install() {
       .h3-optimizer-settings-button.is-header { min-width: 0; width: auto; height: 28px; padding: 0 9px; border-color: transparent; border-radius: 8px; background: transparent; color: rgba(227,227,227,.56); font-size: 12px; font-weight: 500; box-shadow: none; }
       .h3-optimizer-settings-button.is-header:hover, .h3-optimizer-settings-button.is-header:focus-visible { border-color: rgba(168,199,250,.32); background: rgba(168,199,250,.1); color: #dce7fa; outline: none; transform: none; box-shadow: none; }
       .h3-optimizer-settings-button:disabled { cursor: wait; opacity: .52; filter: none; }
+      @media (max-width: 520px) {
+        .h3-optimizer-settings-pair { grid-template-columns: minmax(0, 1fr); }
+      }
     `;
     document.head.append(style);
 }
@@ -8398,6 +8691,8 @@ app.registerExtension({
         installMediaBridgeNode(nodeType, nodeData);
         installMediaSplitterNode(nodeType, nodeData);
         installOutputNode(nodeType, nodeData);
+        installEasySamplerNode(nodeType, nodeData);
+        installSelfLiftStrategyNode(nodeType, nodeData);
         installSegmentRefineNode(nodeType, nodeData);
         installSegmentSampleSetupNode(nodeType, nodeData);
         installSegmentStepNode(nodeType, nodeData);

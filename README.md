@@ -100,6 +100,8 @@ Digital Human mode locks the single Media audio item into the generated result a
 
 Media Loader accepts images, videos, and audio dragged directly from the system file manager. You can also select only the Media Loader node and press `Ctrl+V` to paste supported media from the clipboard. Dragged or pasted files are placed into the appropriate media category automatically.
 
+Audio cards include a compact play/pause control for quick checking. Video cards remain thumbnail previews.
+
 Media Loader can hold a large shared library; the consuming Easy or Context Segments node applies the actual media limits. **Of the four methods, only Media Loader caches decoded video references.** After a video is decoded once, later generations can reuse it through ComfyUI's node cache, reducing the loading and decoding time when the same reference video is used repeatedly. Replacing or modifying the file invalidates the cache automatically. Direct Media-port links, Media Bridge, and Media Splitter do not provide this decoded-video cache. It saves video preparation time, not the model's sampling time.
 
 `Media Splitter` is the reverse utility of Media Loader / Media Bridge: it expands one `Media Bundle` into standard `IMAGE`, `VIDEO`, and `AUDIO` outputs. Set the three counts and only that many output ports are shown; unused ports do not take up canvas space. This makes it useful for sending one shared media library into other ComfyUI workflows.
@@ -170,7 +172,7 @@ Media not referenced by the current segment is not sent into that segment's gene
 
 | Mode | What it carries | Context frames |
 |---|---|---|
-| **Latent Guide** | Passes the previous segment's video latent directly; usually the best starting point | `5 / 22 / 39 / 56 / 73` |
+| **Motion Context** | Uses the previous segment's video latent as time-aligned motion context; usually the best starting point | `5 / 22 / 39 / 56 / 73` |
 | **RGB Guide** | Re-encodes the previous tail as a multi-frame visual Guide | `5 / 22 / 39 / 56 / 73` |
 | **Soft AV Prefix** | Carries both video and audio prefixes, with a softer audio release at the boundary | `39 / 90 / 141` |
 | **Hard AV Prefix** | Strictly preserves the overlapping video and audio prefixes | `39 / 90 / 141` |
@@ -207,7 +209,8 @@ Click `✦` at the bottom-right of the prompt editor to optimize the current pro
 - Gemini Native;
 - Ollama;
 - optional connected-media reading;
-- mode-specific MiniMax H3 Prompt Guides.
+- mode-specific MiniMax H3 Prompt Guides;
+- English and Chinese prompt modes, with a language-specific guide list. Chinese currently includes General, Dialogue, Action, and Advertisement.
 
 <p align="center">
   <img src="images/prompt-editor-controls-en.png" alt="Prompt optimization and view controls" width="520">
@@ -241,6 +244,8 @@ API settings are stored in `prompt_optimizer.json` inside the plugin directory. 
 | MiniMax H3 Easy Media Splitter | Split a Media Bundle into standalone IMAGE, VIDEO, and AUDIO outputs; up to 27 images, 9 videos, and 9 audio clips |
 | MiniMax H3 Easy | Regular generation, reference generation, and Digital Human |
 | MiniMax H3 Easy Output | Expand H3 Context into conditioning, latent, VAEs, FPS, and driving audio |
+| MiniMax H3 Easy Sample | Run a regular first-pass sample, optionally with a sampling strategy |
+| MiniMax H3 Easy SelfLift Strategy | Build a SelfLift sampling plan for Easy Sample or Context Segment workflows |
 | MiniMax H3 Easy Context Segments | Build a long-video segment plan |
 | MiniMax H3 Easy Segment Sample | Run the first-pass segment chain |
 | MiniMax H3 Easy Sample Setup | Provide shared sampling settings once for per-segment workflows |
