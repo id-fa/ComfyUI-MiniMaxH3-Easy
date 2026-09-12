@@ -192,11 +192,12 @@ Context Segments 也支持数字人音频模式：连接且仅连接一条音频
 - **Pixel Resize**：先解码、缩放、再编码；不需要 latent 放大模型。
 - **Latent Upscale**：使用内置 3D latent 放大节点，避免以像素缩放作为放大步骤。
 - **Low VRAM Tile**：将当前片段按空间切块二采，以更多耗时换取更低显存占用。
+- 现在像素放大和 Latent 放大已经合并到同一个上下文分段工作流中，并分别放在独立分组内；默认启用 Latent 放大组和 3-step 自定义 Sigma。
+- 像素放大组不再额外加载第二阶段模型，直接复用第一采模型。
 
-对应示例：
+对应示例（可在两个分组之间切换）：
 
-- [`6.MiniMax_H3_Easy_Context_Segments_Pixel_Refine.json`](workflow/6.MiniMax_H3_Easy_Context_Segments_Pixel_Refine.json)
-- [`5.MiniMax_H3_Easy_Context_Segments_Latent_Refine.json`](workflow/5.MiniMax_H3_Easy_Context_Segments_Latent_Refine.json)
+- [`5.MiniMax_H3_Easy_Context_Segments_Refine.json`](workflow/5.MiniMax_H3_Easy_Context_Segments_Refine.json)
 
 Segment Decode 会逐段解码并写入临时视频文件，最终输出带音频的完整 ComfyUI `VIDEO`，因此不需要在内存中保留整条 RGB 视频。
 

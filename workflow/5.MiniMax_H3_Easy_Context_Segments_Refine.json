@@ -1,15 +1,15 @@
 {
   "id": "58b91cf7-4e4b-4847-82de-7bbf1b189429",
   "revision": 0,
-  "last_node_id": 37,
-  "last_link_id": 571,
+  "last_node_id": 44,
+  "last_link_id": 580,
   "nodes": [
     {
       "id": 21,
       "type": "KSamplerSelect",
       "pos": [
-        1089.5161886058024,
-        -256.2713464766324
+        1370,
+        -500
       ],
       "size": [
         210,
@@ -17,7 +17,7 @@
       ],
       "flags": {},
       "order": 0,
-      "mode": 0,
+      "mode": 4,
       "inputs": [],
       "outputs": [
         {
@@ -46,114 +46,11 @@
       }
     },
     {
-      "id": 18,
-      "type": "UNETLoader",
-      "pos": [
-        539.2803867307882,
-        -454.67286020199225
-      ],
-      "size": [
-        502.47910315306854,
-        82
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            557
-          ]
-        }
-      ],
-      "title": "Second-stage",
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.30.0",
-        "Node name for S&R": "UNETLoader",
-        "models": [
-          {
-            "name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
-            "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors",
-            "directory": "diffusion_models"
-          }
-        ],
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.5.2",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
-        "default"
-      ],
-      "widgets_values_named": {
-        "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
-        "weight_dtype": "default"
-      },
-      "color": "#232",
-      "bgcolor": "#353"
-    },
-    {
-      "id": 19,
-      "type": "ModelAttentionBackend",
-      "pos": [
-        1109.4479121355594,
-        -425.15218842468585
-      ],
-      "size": [
-        210,
-        58
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "model",
-          "type": "MODEL",
-          "link": 557
-        }
-      ],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            558,
-            559
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.31.0",
-        "Node name for S&R": "ModelAttentionBackend",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.5.2"
-        }
-      },
-      "widgets_values": [
-        "comfy kitchen attention"
-      ],
-      "widgets_values_named": {
-        "attention": "comfy kitchen attention"
-      },
-      "color": "#223",
-      "bgcolor": "#335"
-    },
-    {
       "id": 23,
       "type": "BasicScheduler",
       "pos": [
-        1408.5269660833317,
-        -455.13028018549267
+        1660,
+        -680
       ],
       "size": [
         210,
@@ -161,12 +58,12 @@
       ],
       "flags": {},
       "order": 7,
-      "mode": 0,
+      "mode": 4,
       "inputs": [
         {
           "name": "model",
           "type": "MODEL",
-          "link": 558
+          "link": 572
         }
       ],
       "outputs": [
@@ -203,8 +100,8 @@
       "id": 3,
       "type": "LoraLoaderModelOnly",
       "pos": [
-        152.3133785220531,
-        -186.9600304269573
+        360,
+        -180
       ],
       "size": [
         273.60542420351,
@@ -226,7 +123,10 @@
           "type": "MODEL",
           "links": [
             548,
-            549
+            549,
+            572,
+            573,
+            576
           ]
         }
       ],
@@ -255,8 +155,8 @@
       "id": 6,
       "type": "MiniMaxH3EasySegmentRender",
       "pos": [
-        714.9393667364678,
-        -267.00246229026317
+        680,
+        -300
       ],
       "size": [
         340.9050606744877,
@@ -293,7 +193,8 @@
           "type": "MINIMAX_H3_SEGMENTS",
           "links": [
             553,
-            565
+            565,
+            575
           ]
         }
       ],
@@ -313,8 +214,8 @@
       "id": 11,
       "type": "MiniMaxH3EasyAspectRatio",
       "pos": [
-        726.7502247313104,
-        -61.30501546237577
+        1080,
+        -650
       ],
       "size": [
         324.8777674339707,
@@ -322,7 +223,7 @@
       ],
       "flags": {},
       "order": 9,
-      "mode": 0,
+      "mode": 4,
       "inputs": [
         {
           "name": "h3_context",
@@ -349,8 +250,8 @@
       "id": 4,
       "type": "KSamplerSelect",
       "pos": [
-        462.9514517381388,
-        -298.6917480263738
+        360,
+        -350
       ],
       "size": [
         210,
@@ -390,8 +291,8 @@
       "id": 5,
       "type": "BasicScheduler",
       "pos": [
-        456.5947381530811,
-        -189.82310488387574
+        360,
+        -500
       ],
       "size": [
         210,
@@ -441,8 +342,8 @@
       "id": 32,
       "type": "MiniMaxH3EasySegmentRefine",
       "pos": [
-        1412.3341360870907,
-        -303.41381469388546
+        1940,
+        -590
       ],
       "size": [
         390,
@@ -450,7 +351,7 @@
       ],
       "flags": {},
       "order": 14,
-      "mode": 0,
+      "mode": 4,
       "inputs": [
         {
           "label": "H3 Context",
@@ -468,7 +369,7 @@
           "label": "Model",
           "name": "model",
           "type": "MODEL",
-          "link": 559
+          "link": 573
         },
         {
           "name": "sampler",
@@ -548,8 +449,8 @@
       "id": 12,
       "type": "ResolutionSelector",
       "pos": [
-        1097.7504804560908,
-        -156.80830508081223
+        1370,
+        -680
       ],
       "size": [
         289.3520324951173,
@@ -557,7 +458,7 @@
       ],
       "flags": {},
       "order": 11,
-      "mode": 0,
+      "mode": 4,
       "showAdvanced": false,
       "inputs": [
         {
@@ -639,8 +540,8 @@
       "id": 34,
       "type": "MiniMaxH3EasySegmentDecode",
       "pos": [
-        1103.3978411922571,
-        11.069278667338029
+        1060,
+        -160
       ],
       "size": [
         214.148046875,
@@ -673,8 +574,8 @@
       "id": 35,
       "type": "MiniMaxH3EasySegmentDecode",
       "pos": [
-        1832.8636686924472,
-        -304.726296147792
+        2380,
+        -590
       ],
       "size": [
         214.148046875,
@@ -682,7 +583,7 @@
       ],
       "flags": {},
       "order": 16,
-      "mode": 0,
+      "mode": 4,
       "inputs": [
         {
           "name": "segments",
@@ -707,8 +608,8 @@
       "id": 1,
       "type": "MiniMaxH3EasyLoader",
       "pos": [
-        -1142.6743752806601,
-        -544.8314579590383
+        -1140,
+        -520
       ],
       "size": [
         430,
@@ -797,8 +698,8 @@
       "id": 29,
       "type": "SaveVideo",
       "pos": [
-        696.3261111431409,
-        183.58167322049047
+        2670,
+        -520
       ],
       "size": [
         480.2836923422608,
@@ -806,7 +707,7 @@
       ],
       "flags": {},
       "order": 18,
-      "mode": 0,
+      "mode": 4,
       "inputs": [
         {
           "name": "video",
@@ -821,7 +722,7 @@
           "links": []
         }
       ],
-      "title": "分段二采成片",
+      "title": "像素放大二采成片",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.30.0",
@@ -833,13 +734,13 @@
         }
       },
       "widgets_values": [
-        "video/H3Seg_SegmentRefine_Pixel",
+        "video/H3Seg_ContextRefine_Pixel",
         "auto",
         "auto",
         "auto"
       ],
       "widgets_values_named": {
-        "filename_prefix": "video/H3Seg_SegmentRefine_Pixel",
+        "filename_prefix": "video/H3Seg_ContextRefine_Pixel",
         "format": "auto",
         "format.codec": "auto",
         "codec": "auto"
@@ -851,8 +752,8 @@
       "id": 36,
       "type": "ModelAttentionBackend",
       "pos": [
-        156.69981446289268,
-        -299.00716182241206
+        40,
+        -180
       ],
       "size": [
         270,
@@ -893,8 +794,8 @@
       "id": 27,
       "type": "SaveVideo",
       "pos": [
-        128.44376363600145,
-        187.89124463474144
+        1340,
+        -160
       ],
       "size": [
         480.2836923422608,
@@ -947,8 +848,8 @@
       "id": 37,
       "type": "MiniMaxH3EasyMediaLoader",
       "pos": [
-        -1033.5233142404038,
-        -331.0729780002105
+        -1140,
+        -300
       ],
       "size": [
         320,
@@ -983,8 +884,8 @@
       "id": 2,
       "type": "MiniMaxH3EasyContextSegments",
       "pos": [
-        -570.4801793030382,
-        -438.85457601339465
+        -570,
+        -470
       ],
       "size": [
         430,
@@ -1024,7 +925,8 @@
           "links": [
             545,
             546,
-            547
+            547,
+            574
           ]
         }
       ],
@@ -1131,12 +1033,12 @@
         22,
         "RGB Guide",
         true,
-        24,
         "首帧优先",
-        "1K 面积（约1MP）",
+        "1K 面积（约 1MP）",
         "按序号",
-        false,
+        "按序号",
         "仅通用方案",
+        "整体优化",
         "整体优化",
         3
       ],
@@ -1155,12 +1057,372 @@
         "advanced": true,
         "fps": 24,
         "keyframe_role": "首帧优先",
-        "ref_image_size": "1K 面积（约1MP）",
+        "ref_image_size": "1K 面积（约 1MP）",
         "reference_mention_mode": "按序号",
         "prompt_optimizer_settings": false,
         "prompt_optimizer_scene_guide": "仅通用方案",
         "context_prompt_optimizer_mode": "整体优化",
         "context_prompt_optimizer_concurrency": 3
+      }
+    },
+    {
+      "id": 38,
+      "type": "KSamplerSelect",
+      "pos": [
+        1370,
+        230
+      ],
+      "size": [
+        210,
+        58
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "SAMPLER",
+          "type": "SAMPLER",
+          "links": [
+            577
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
+        "Node name for S&R": "KSamplerSelect",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.5.2",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "euler"
+      ],
+      "widgets_values_named": {
+        "sampler_name": "euler"
+      }
+    },
+    {
+      "id": 39,
+      "type": "MiniMaxH3EasySegmentRefine",
+      "pos": [
+        1660,
+        160
+      ],
+      "size": [
+        390,
+        306
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "H3 Context",
+          "name": "h3_context",
+          "type": "MINIMAX_H3_CONTEXT",
+          "link": 574
+        },
+        {
+          "label": "分段结果",
+          "name": "segments",
+          "type": "MINIMAX_H3_SEGMENTS",
+          "link": 575
+        },
+        {
+          "label": "Model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 576
+        },
+        {
+          "name": "sampler",
+          "type": "SAMPLER",
+          "link": 577
+        },
+        {
+          "name": "sigmas",
+          "type": "SIGMAS",
+          "link": 578
+        }
+      ],
+      "outputs": [
+        {
+          "label": "分段结果",
+          "name": "refined_segments",
+          "type": "MINIMAX_H3_SEGMENTS",
+          "links": [
+            579
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3EasySegmentRefine",
+        "cnr_id": "comfyui-minimaxh3-easy"
+      },
+      "widgets_values": [
+        "Latent Upscale",
+        0,
+        "fixed",
+        "Standard",
+        0,
+        0,
+        "minimax_h3_latent_upscaler_3d_fp16.safetensors",
+        2,
+        "cuda",
+        "fp16",
+        512,
+        512,
+        128,
+        32
+      ],
+      "widgets_values_named": {
+        "refine_mode": "Latent Upscale",
+        "seed": 0,
+        "control_after_generate": "fixed",
+        "refine_execution": "Standard",
+        "target_width": 0,
+        "target_height": 0,
+        "latent_upscale_model": "minimax_h3_latent_upscaler_3d_fp16.safetensors",
+        "latent_upscale_scale": 2,
+        "latent_upscale_device": "cuda",
+        "latent_upscale_precision": "fp16",
+        "tile_width": 512,
+        "tile_height": 512,
+        "tile_overlap": 128,
+        "tile_fade": 32
+      }
+    },
+    {
+      "id": 40,
+      "type": "MiniMaxH3EasySegmentDecode",
+      "pos": [
+        2100,
+        180
+      ],
+      "size": [
+        234.38836914062483,
+        26
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "segments",
+          "type": "MINIMAX_H3_SEGMENTS",
+          "link": 579
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview",
+          "type": "VIDEO",
+          "links": [
+            580
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3EasySegmentDecode"
+      }
+    },
+    {
+      "id": 41,
+      "type": "SaveVideo",
+      "pos": [
+        2380,
+        110
+      ],
+      "size": [
+        480.2836923422608,
+        369.4646956717126
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 580
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": []
+        }
+      ],
+      "title": "Latent 放大二采成片",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
+        "Node name for S&R": "SaveVideo",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.5.2",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "video/H3Seg_ContextRefine_Latent",
+        "auto",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "video/H3Seg_ContextRefine_Latent",
+        "format": "auto",
+        "format.codec": "auto",
+        "codec": "auto"
+      },
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 42,
+      "type": "ManualSigmas",
+      "pos": [
+        1040,
+        120
+      ],
+      "size": [
+        447.2088928222656,
+        58
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "sigmas",
+          "name": "sigmas",
+          "type": "STRING",
+          "widget": {
+            "name": "sigmas"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "label": "SIGMAS",
+          "name": "SIGMAS",
+          "type": "SIGMAS",
+          "links": [
+            578
+          ]
+        }
+      ],
+      "title": "3 Step Sigmas",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "ManualSigmas",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "0.9035, 0.6316, 0.3158, 0.0000"
+      ],
+      "widgets_values_named": {
+        "sigmas": "0.9035, 0.6316, 0.3158, 0.0000"
+      }
+    },
+    {
+      "id": 43,
+      "type": "ManualSigmas",
+      "pos": [
+        1040,
+        205
+      ],
+      "size": [
+        447.2088928222656,
+        58
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 4,
+      "inputs": [
+        {
+          "label": "sigmas",
+          "name": "sigmas",
+          "type": "STRING",
+          "widget": {
+            "name": "sigmas"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "label": "SIGMAS",
+          "name": "SIGMAS",
+          "type": "SIGMAS",
+          "links": []
+        }
+      ],
+      "title": "4 Step Sigmas",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "ManualSigmas",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "0.9035, 0.8000, 0.6316, 0.3158, 0.0000"
+      ],
+      "widgets_values_named": {
+        "sigmas": "0.9035, 0.8000, 0.6316, 0.3158, 0.0000"
+      }
+    },
+    {
+      "id": 44,
+      "type": "ManualSigmas",
+      "pos": [
+        1040,
+        290
+      ],
+      "size": [
+        447.2088928222656,
+        58
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 4,
+      "inputs": [
+        {
+          "label": "sigmas",
+          "name": "sigmas",
+          "type": "STRING",
+          "widget": {
+            "name": "sigmas"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "label": "SIGMAS",
+          "name": "SIGMAS",
+          "type": "SIGMAS",
+          "links": []
+        }
+      ],
+      "title": "5 Step Sigmas",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "ManualSigmas",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "0.9231, 0.8780, 0.8000, 0.6316, 0.3158, 0.0000"
+      ],
+      "widgets_values_named": {
+        "sigmas": "0.9231, 0.8780, 0.8000, 0.6316, 0.3158, 0.0000"
       }
     }
   ],
@@ -1262,30 +1524,6 @@
       "INT"
     ],
     [
-      557,
-      18,
-      0,
-      19,
-      0,
-      "MODEL"
-    ],
-    [
-      558,
-      19,
-      0,
-      23,
-      0,
-      "MODEL"
-    ],
-    [
-      559,
-      19,
-      0,
-      32,
-      2,
-      "MODEL"
-    ],
-    [
       560,
       21,
       0,
@@ -1356,12 +1594,109 @@
       2,
       1,
       "MINIMAX_H3_MEDIA_BUNDLE"
+    ],
+    [
+      572,
+      3,
+      0,
+      23,
+      0,
+      "MODEL"
+    ],
+    [
+      573,
+      3,
+      0,
+      32,
+      2,
+      "MODEL"
+    ],
+    [
+      574,
+      2,
+      1,
+      39,
+      0,
+      "MINIMAX_H3_CONTEXT"
+    ],
+    [
+      575,
+      6,
+      0,
+      39,
+      1,
+      "MINIMAX_H3_SEGMENTS"
+    ],
+    [
+      576,
+      3,
+      0,
+      39,
+      2,
+      "MODEL"
+    ],
+    [
+      577,
+      38,
+      0,
+      39,
+      3,
+      "SAMPLER"
+    ],
+    [
+      578,
+      42,
+      0,
+      39,
+      4,
+      "SIGMAS"
+    ],
+    [
+      579,
+      39,
+      0,
+      40,
+      0,
+      "MINIMAX_H3_SEGMENTS"
+    ],
+    [
+      580,
+      40,
+      0,
+      41,
+      0,
+      "VIDEO"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "上下文分段 - 像素放大二采",
+      "bounding": [
+        1000,
+        -760,
+        2250,
+        820
+      ],
+      "color": "#76536e",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "上下文分段 - Latent 放大二采",
+      "bounding": [
+        990,
+        90,
+        2070,
+        560
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
-    "frontendVersion": "1.49.6",
+    "frontendVersion": "1.51.9",
     "ds": {
       "scale": 0.8839456144920814,
       "offset": [
@@ -1372,7 +1707,8 @@
     "VHS_latentpreview": false,
     "VHS_latentpreviewrate": 0,
     "VHS_MetadataImage": true,
-    "VHS_KeepIntermediate": true
+    "VHS_KeepIntermediate": true,
+    "workflow_note": "Unified Context Segments refinement workflow. Use the Latent Upscale group for the default 3-step ManualSigmas path, or enable the Pixel Resize group as an alternative. Pixel Resize reuses the first-pass model instead of loading a separate second-stage model."
   },
   "version": 0.4
 }

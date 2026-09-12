@@ -192,11 +192,12 @@ Context Segments also supports Digital Human audio mode. Connect exactly one aud
 - **Pixel Resize**: decode, resize, and re-encode; no latent upscaler model is required.
 - **Latent Upscale**: use the built-in 3D latent upscaler instead of pixel resizing.
 - **Low VRAM Tile**: spatially tile the current segment to trade more sampling time for lower VRAM use.
+- Pixel Resize and Latent Upscale are now combined in one Context Segments workflow and placed in separate groups; the Latent Upscale group with the 3-step custom Sigma is enabled by default.
+- Pixel Resize no longer loads a separate second-stage model; it reuses the first-pass model directly.
 
-Example workflows:
+Example workflow (switch between the two groups as needed):
 
-- [`6.MiniMax_H3_Easy_Context_Segments_Pixel_Refine.json`](workflow/6.MiniMax_H3_Easy_Context_Segments_Pixel_Refine.json)
-- [`5.MiniMax_H3_Easy_Context_Segments_Latent_Refine.json`](workflow/5.MiniMax_H3_Easy_Context_Segments_Latent_Refine.json)
+- [`5.MiniMax_H3_Easy_Context_Segments_Refine.json`](workflow/5.MiniMax_H3_Easy_Context_Segments_Refine.json)
 
 Segment Decode decodes one segment at a time into a temporary video file and returns a complete ComfyUI `VIDEO` with audio. It does not keep the full RGB timeline in memory.
 
