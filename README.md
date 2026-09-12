@@ -243,7 +243,7 @@ API settings are stored in `prompt_optimizer.json` inside the plugin directory. 
 | MiniMax H3 Easy Media Bridge | Provide explicit media inputs for API or headless workflows |
 | MiniMax H3 Easy Media Splitter | Split a Media Bundle into standalone IMAGE, VIDEO, and AUDIO outputs; up to 27 images, 9 videos, and 9 audio clips |
 | MiniMax H3 Easy | Regular generation, reference generation, and Digital Human |
-| MiniMax H3 Easy Output | Expand H3 Context into conditioning, latent, VAEs, FPS, and driving audio |
+| MiniMax H3 Easy Output | Expand H3 Context into conditioning, latent, VAEs, and FPS |
 | MiniMax H3 Easy Sample | Run a regular first-pass sample, optionally with a sampling strategy |
 | MiniMax H3 Easy SelfLift Strategy | Build a SelfLift sampling plan for Easy Sample or Context Segment workflows |
 | MiniMax H3 Easy Context Segments | Build a long-video segment plan |

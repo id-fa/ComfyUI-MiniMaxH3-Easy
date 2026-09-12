@@ -319,13 +319,6 @@
           "links": [
             18
           ]
-        },
-        {
-          "label": "驱动音频",
-          "localized_name": "驱动音频",
-          "name": "driving_audio",
-          "type": "AUDIO",
-          "links": null
         }
       ],
       "properties": {

@@ -243,7 +243,7 @@ API 设置保存在插件目录的 `prompt_optimizer.json`。API Key 在该文�
 | MiniMax H3 Easy Media Bridge | 为 API 或无头工作流提供显式媒体输入 |
 | MiniMax H3 Easy Media Splitter | 将 Media Bundle 拆成独立的 IMAGE、VIDEO 和 AUDIO 输出；最多 27 张图片、9 个视频和 9 个音频 |
 | MiniMax H3 Easy | 普通生成、参考生成与数字人 |
-| MiniMax H3 Easy Output | 将 H3 Context 展开为标准 Conditioning、Latent、VAE、FPS 和驱动音频 |
+| MiniMax H3 Easy Output | 将 H3 Context 展开为标准 Conditioning、Latent、VAE 和 FPS |
 | MiniMax H3 Easy Sample | 执行普通第一采，可选连接采样方案 |
 | MiniMax H3 Easy SelfLift Strategy | 为普通第一采或上下文分段工作流创建 SelfLift 采样方案 |
 | MiniMax H3 Easy Context Segments | 创建长视频分段计划 |

@@ -228,7 +228,6 @@ const TEXT = {
     outputVideoVae: "Video VAE",
     outputAudioVae: "Audio VAE",
     outputFps: "FPS",
-    drivingAudio: ZH_BROWSER ? "\u9a71\u52a8\u97f3\u9891" : "Driving audio",
     outputContext: "H3 Context",
     inputMedia: "Media",
     selectedVideoInput: ZH_BROWSER ? "候选视频" : "Selected video",
@@ -910,7 +909,7 @@ function localizeNodeInstance(node) {
         for (const input of node.inputs || []) {
             if (input.name === "h3_context") setLocalizedSlotLabel(input, TEXT.outputContext);
         }
-        const outputLabels = { positive: TEXT.outputConditioning, latent: TEXT.outputLatent, video_vae: TEXT.outputVideoVae, audio_vae: TEXT.outputAudioVae, fps: TEXT.outputFps, driving_audio: TEXT.drivingAudio };
+        const outputLabels = { positive: TEXT.outputConditioning, latent: TEXT.outputLatent, video_vae: TEXT.outputVideoVae, audio_vae: TEXT.outputAudioVae, fps: TEXT.outputFps };
         for (const output of node.outputs || []) {
             const key = String(output.name || "").toLowerCase();
             if (outputLabels[key]) setLocalizedSlotLabel(output, outputLabels[key]);

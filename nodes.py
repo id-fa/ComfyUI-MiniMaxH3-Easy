@@ -5314,9 +5314,9 @@ class MiniMaxH3EasyContextSegments:
 class MiniMaxH3EasyOutput:
     CATEGORY = "MiniMax H3 Easy"
     FUNCTION = "unpack"
-    RETURN_TYPES = ("CONDITIONING", "LATENT", "VAE", "VAE", "FLOAT", "AUDIO")
-    RETURN_NAMES = ("positive", "latent", "video_vae", "audio_vae", "fps", "driving_audio")
-    DESCRIPTION = "Unpack MiniMax H3 conditioning, AV latent, VAEs, FPS, and the optional Digital Human driving audio."
+    RETURN_TYPES = ("CONDITIONING", "LATENT", "VAE", "VAE", "FLOAT")
+    RETURN_NAMES = ("positive", "latent", "video_vae", "audio_vae", "fps")
+    DESCRIPTION = "Unpack MiniMax H3 conditioning, AV latent, VAEs, and FPS."
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -5336,7 +5336,6 @@ class MiniMaxH3EasyOutput:
             h3_context.video_vae,
             h3_context.audio_vae,
             h3_context.fps,
-            h3_context.source_audio,
         )
 
 
